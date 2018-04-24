@@ -4,7 +4,7 @@ Plugin Name: Feature Image Switcher
 Plugin URI: http://spirit-of-football.de/
 Description: Creates a switcher for changing the feature image of a post.
 Author: Christian Wach
-Version: 0.1
+Version: 0.1.1
 Author URI: http://haystack.co.uk
 Text Domain: feature-image-switcher
 Domain Path: /languages
@@ -14,7 +14,7 @@ Domain Path: /languages
 
 
 // set our version here
-define( 'FEATURE_IMAGE_SWITCHER_VERSION', '0.1' );
+define( 'FEATURE_IMAGE_SWITCHER_VERSION', '0.1.1' );
 
 // store reference to this file
 if ( ! defined( 'FEATURE_IMAGE_SWITCHER_FILE' ) ) {
