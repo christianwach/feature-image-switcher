@@ -105,17 +105,6 @@ class Feature_Image_Switcher {
 	 */
 	public function get_feature_image( $html, $post ) {
 
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'html' => $html,
-			'post' => $post,
-			'backtrace' => $trace,
-		), true ) );
-		*/
-
 		// disallow users without upload permissions
 		if ( ! current_user_can( 'upload_files' ) ) return $html;
 
@@ -227,16 +216,6 @@ class Feature_Image_Switcher {
 		// add to data
 		$data['attachment_id'] = $attachment_id;
 
-		/*
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'POST' => $_POST,
-			'post_id' => $post_id,
-			'attachment_id' => $attachment_id,
-			'data' => $data,
-		), true ) );
-		*/
-
 		// okay let's do it
 		set_post_thumbnail( $post_id, $attachment_id );
 
@@ -267,7 +246,6 @@ class Feature_Image_Switcher {
 	public function filter_media( $query ) {
 
 		// admins and editors get to see everything
-		//if ( ! current_user_can( 'manage_options' ) ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			$query['author'] = get_current_user_id();
 		}
