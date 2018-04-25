@@ -63,8 +63,8 @@ class Feature_Image_Switcher {
 		// use translation
 		add_action( 'plugins_loaded', array( $this, 'translation' ) );
 
-		// filter the feature image markup on a page
-		add_filter( 'commentpress_get_feature_image', array( $this, 'get_feature_image' ), 20, 2 );
+		// filter the feature image markup and add button
+		add_filter( 'commentpress_get_feature_image', array( $this, 'get_button' ), 20, 2 );
 
 		// save feature image
 		add_action( 'wp_ajax_set_feature_image', array( $this, 'set_feature_image' ) );
@@ -103,19 +103,10 @@ class Feature_Image_Switcher {
 	 * @param WP_Post $post The WordPress post object.
 	 * @return str $html The modified feature image markup.
 	 */
-	public function get_feature_image( $html, $post ) {
+	public function get_button( $html, $post ) {
 
-		// disallow users without upload permissions
-		if ( ! current_user_can( 'upload_files' ) ) return $html;
-
-		// disallow users who are not editors
-		if ( ! current_user_can( 'edit_posts' ) ) return $html;
-
-		// disallow unless singular
-		if ( ! is_singular() ) return $html;
-
-		// disallow poets
-		if ( $post->post_type == 'poet' ) return $html;
+		// disallow users without permissions
+		if ( ! $this->allow_button( $post ) ) return $html;
 
 		// append our HTML to the image markup
 		$html .= '<a href="#" class="feature-image-switcher button" id="feature-image-switcher-' . $post->ID . '" style="position: absolute; top: 20px; right: 20px; text-transform: uppercase; font-family: sans-serif; font-weight: bold;">' . __( 'Choose New', 'feature-image-switcher' ) . '</a>';
@@ -125,6 +116,51 @@ class Feature_Image_Switcher {
 
 		// --<
 		return $html;
+
+	}
+
+
+
+	/**
+	 * Conditions for showing feature image switcher button.
+	 *
+	 * @since 0.1.1
+	 *
+	 * @param WP_Post $post The WordPress post object.
+	 * @return bool $allowed True if button is to be shown, false otherwise.
+	 */
+	public function allow_button( $post ) {
+
+		// init as allowed
+		$allowed = true;
+
+		// disallow users without upload permissions
+		if ( ! current_user_can( 'upload_files' ) ) {
+			$allowed = false;
+
+		// disallow users who are not editors
+		} elseif ( ! current_user_can( 'edit_posts' ) ) {
+			$allowed = false;
+
+		// disallow unless singular
+		} elseif ( ! is_singular() ) {
+			$allowed = false;
+
+		}
+
+		/**
+		 * Filter the conditions for showing feature image switcher button.
+		 *
+		 * @since 0.1.1
+		 *
+		 * @param bool $allowed True if button is to be shown, false otherwise.
+		 * @param WP_Post $post The WordPress post object.
+		 * @return bool $allowed True if button is to be shown, false otherwise.
+		 */
+		$allowed = apply_filters( 'feature_image_switcher_allow_button', $allowed, $post );
+
+		// --<
+		return $allowed;
 
 	}
 
