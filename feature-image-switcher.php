@@ -5,7 +5,7 @@
  * Description: Creates a switcher for changing the feature image of a post.
  * Author: Christian Wach
  * Version: 0.1.1
- * Author URI: http://haystack.co.uk
+ * Author URI: https://haystack.co.uk
  * Text Domain: feature-image-switcher
  * Domain Path: /languages
  *
