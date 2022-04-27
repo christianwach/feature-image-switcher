@@ -220,14 +220,15 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 				// Add callback for image selection.
 				file_frame.on( 'select', function() {
 
-					// Grab attachment data.
-					attachment = file_frame.state().get( 'selection' ).first().toJSON();
+					// Grab attachment data and security token.
+					var attachment = file_frame.state().get( 'selection' ).first().toJSON(),
+						token = button.data( 'security' );
 
 					// Show spinner.
 					$('#feature-image-loading').show();
 
-					// Send the ID to the server.
-					me.send( post_id, attachment.id );
+					// Send the data to the server.
+					me.send( post_id, attachment.id, token );
 
 				});
 
@@ -248,32 +249,42 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 *
 		 * @param {Integer} post_id The numeric ID of the post.
 		 * @param {Integer} attachment_id The numeric ID of the attachment.
+		 * @param {String} token The AJAX security token.
 		 */
-		this.send = function( post_id, attachment_id ) {
+		this.send = function( post_id, attachment_id, token ) {
+
+			// Define vars.
+			var url, data;
+
+			// URL to post to.
+			url = Featured_Image_Switcher.settings.get_setting( 'ajax_url' );
+
+			// Data received by WordPress.
+			data = {
+				action: 'set_feature_image',
+				post_id: post_id,
+				attachment_id: attachment_id,
+				_ajax_nonce: token
+			};
 
 			// Use jQuery post.
-			$.post(
+			$.post( url, data,
 
-				// URL to post to.
-				Featured_Image_Switcher.settings.get_setting( 'ajax_url' ),
-
-				{
-
-					// Token received by WordPress.
-					action: 'set_feature_image',
-
-					// Data to pass.
-					post_id: post_id,
-					attachment_id: attachment_id
-
-				},
-
-				// Callback.
-				function( data, textStatus ) {
+				/**
+				 * AJAX callback which receives response from the server.
+				 *
+				 * Calls feedback method on success or shows an error in the console.
+				 *
+				 * @since 0.1
+				 *
+				 * @param {Mixed} response The received JSON data array.
+				 * @param {String} textStatus The status of the response.
+				 */
+				function( response, textStatus ) {
 
 					// Update if success, otherwise show error.
 					if ( textStatus == 'success' ) {
-						me.update( data );
+						me.update( response );
 					} else {
 						if ( console.log ) {
 							console.log( textStatus );

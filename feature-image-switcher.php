@@ -106,7 +106,7 @@ class Feature_Image_Switcher {
 		}
 
 		// Append our HTML to the image markup.
-		$html .= '<a href="#" class="feature-image-switcher button" id="feature-image-switcher-' . $post->ID . '" style="position: absolute; top: 20px; right: 20px; text-transform: uppercase; font-family: sans-serif; font-weight: bold;">' . __( 'Choose New', 'feature-image-switcher' ) . '</a>';
+		$html .= '<input type="submit" name="feature-image-switcher-' . $post->ID . '" id="feature-image-switcher-' . $post->ID . '" class="button feature-image-switcher" value="' . esc_attr__( 'Choose New', 'feature-image-switcher' ) . '" style="position: absolute; top: 20px; right: 20px; text-transform: uppercase; font-family: sans-serif; font-weight: bold;" data-security="' . esc_attr( wp_create_nonce( 'feature_image_switcher' ) ) . '">';
 
 		// Add javascripts.
 		$this->enqueue_scripts();
@@ -128,19 +128,15 @@ class Feature_Image_Switcher {
 
 		// Init as allowed.
 		$allowed = true;
-
-		// Disallow users without upload permissions.
 		if ( ! current_user_can( 'upload_files' ) ) {
+			// Disallow users without upload permissions.
 			$allowed = false;
-
-		// Disallow users who are not editors.
 		} elseif ( ! current_user_can( 'edit_posts' ) ) {
+			// Disallow users who are not editors.
 			$allowed = false;
-
-		// Disallow unless singular.
 		} elseif ( ! is_singular() ) {
+			// Disallow unless singular.
 			$allowed = false;
-
 		}
 
 		/**
@@ -217,14 +213,20 @@ class Feature_Image_Switcher {
 			'success' => 'false',
 		];
 
+		// Since this is an AJAX request, check security.
+		$result = check_ajax_referer( 'feature_image_switcher', false, false );
+		if ( $result === false ) {
+			wp_send_json( $data );
+		}
+
 		// Disallow users without upload permissions.
 		if ( ! current_user_can( 'upload_files' ) ) {
-			return $data;
+			wp_send_json( $data );
 		}
 
 		// Disallow users who are not editors.
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			return $data;
+			wp_send_json( $data );
 		}
 
 		// Get post ID.
@@ -232,10 +234,10 @@ class Feature_Image_Switcher {
 
 		// Sanity checks.
 		if ( ! is_numeric( $post_id ) ) {
-			return $data;
+			wp_send_json( $data );
 		}
 		if ( $post_id === 0 ) {
-			return $data;
+			wp_send_json( $data );
 		}
 
 		// Add to data.
@@ -246,10 +248,10 @@ class Feature_Image_Switcher {
 
 		// Sanity checks.
 		if ( ! is_numeric( $attachment_id ) ) {
-			return $data;
+			wp_send_json( $data );
 		}
 		if ( $attachment_id === 0 ) {
-			return $data;
+			wp_send_json( $data );
 		}
 
 		// Add to data.
@@ -268,7 +270,7 @@ class Feature_Image_Switcher {
 		$data['success'] = 'true';
 
 		// Send data to browser.
-		$this->send_data( $data );
+		wp_send_json( $data );
 
 	}
 
@@ -289,33 +291,6 @@ class Feature_Image_Switcher {
 
 		// --<
 		return $query;
-
-	}
-
-	/**
-	 * Send JSON data to the browser.
-	 *
-	 * @since 0.1
-	 *
-	 * @param array $data The data to send.
-	 */
-	private function send_data( $data ) {
-
-		// Is this an AJAX request?
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-
-			// Set reasonable headers.
-			header( 'Content-type: text/plain' );
-			header( 'Cache-Control: no-cache' );
-			header( 'Expires: -1' );
-
-			// Echo data.
-			echo json_encode( $data );
-
-			// Die.
-			exit();
-
-		}
 
 	}
 
