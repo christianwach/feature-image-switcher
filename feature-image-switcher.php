@@ -230,7 +230,7 @@ class Feature_Image_Switcher {
 		if ( ! current_user_can( 'upload_files' ) ) return $data;
 
 		// disallow users who are not editors
-		if ( ! current_user_can( 'edit_posts' ) ) return $html;
+		if ( ! current_user_can( 'edit_posts' ) ) return $data;
 
 		// get post ID
 		$post_id = isset( $_POST['post_id'] ) ? absint( trim( $_POST['post_id'] ) ) : 0;
