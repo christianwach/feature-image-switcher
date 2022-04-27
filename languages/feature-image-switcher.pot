@@ -1,44 +1,44 @@
-# Copyright (C) 2018 Feature Image Switcher
-# This file is distributed under the same license as the Feature Image Switcher package.
+# Copyright (C) 2022 Christian Wach
+# This file is distributed under the same license as the Feature Image Switcher plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: Feature Image Switcher 0.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/feature-image-switcher\n"
-"POT-Creation-Date: 2018-05-08 21:32:59+00:00\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2022-04-27T12:54:27+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: feature-image-switcher\n"
 
-#: feature-image-switcher.php:112
-msgid "Choose New"
-msgstr ""
-
-#: feature-image-switcher.php:190
-msgid "Choose Feature Image"
-msgstr ""
-
-#: feature-image-switcher.php:191
-msgid "Set Feature Image"
-msgstr ""
-#. Plugin Name of the plugin/theme
+#. Plugin Name of the plugin
 msgid "Feature Image Switcher"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
+#. Plugin URI of the plugin
 msgid "http://spirit-of-football.de/"
 msgstr ""
 
-#. Description of the plugin/theme
+#. Description of the plugin
 msgid "Creates a switcher for changing the feature image of a post."
 msgstr ""
 
-#. Author of the plugin/theme
+#. Author of the plugin
 msgid "Christian Wach"
 msgstr ""
 
-#. Author URI of the plugin/theme
+#. Author URI of the plugin
 msgid "http://haystack.co.uk"
+msgstr ""
+
+msgid "Choose New"
+msgstr ""
+
+msgid "Choose Feature Image"
+msgstr ""
+
+msgid "Set Feature Image"
 msgstr ""

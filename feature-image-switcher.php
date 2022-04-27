@@ -1,37 +1,37 @@
-<?php /*
---------------------------------------------------------------------------------
-Plugin Name: Feature Image Switcher
-Plugin URI: http://spirit-of-football.de/
-Description: Creates a switcher for changing the feature image of a post.
-Author: Christian Wach
-Version: 0.1.1
-Author URI: http://haystack.co.uk
-Text Domain: feature-image-switcher
-Domain Path: /languages
---------------------------------------------------------------------------------
-*/
+<?php
+/**
+ * Plugin Name: Feature Image Switcher
+ * Plugin URI: http://spirit-of-football.de/
+ * Description: Creates a switcher for changing the feature image of a post.
+ * Author: Christian Wach
+ * Version: 0.1.1
+ * Author URI: http://haystack.co.uk
+ * Text Domain: feature-image-switcher
+ * Domain Path: /languages
+ *
+ * @package Feature_Image_Switcher
+ */
 
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
-
-// set our version here
+// Set our version here.
 define( 'FEATURE_IMAGE_SWITCHER_VERSION', '0.1.1' );
 
-// store reference to this file
+// Store reference to this file.
 if ( ! defined( 'FEATURE_IMAGE_SWITCHER_FILE' ) ) {
 	define( 'FEATURE_IMAGE_SWITCHER_FILE', __FILE__ );
 }
 
-// store URL to this plugin's directory
+// Store URL to this plugin's directory.
 if ( ! defined( 'FEATURE_IMAGE_SWITCHER_URL' ) ) {
 	define( 'FEATURE_IMAGE_SWITCHER_URL', plugin_dir_url( FEATURE_IMAGE_SWITCHER_FILE ) );
 }
 
-// store PATH to this plugin's directory
+// Store PATH to this plugin's directory.
 if ( ! defined( 'FEATURE_IMAGE_SWITCHER_PATH' ) ) {
 	define( 'FEATURE_IMAGE_SWITCHER_PATH', plugin_dir_path( FEATURE_IMAGE_SWITCHER_FILE ) );
 }
-
-
 
 /**
  * Feature Image Switcher Plugin Class.
@@ -51,8 +51,6 @@ class Feature_Image_Switcher {
 	 */
 	public $switcher;
 
-
-
 	/**
 	 * Constructor.
 	 *
@@ -60,21 +58,19 @@ class Feature_Image_Switcher {
 	 */
 	public function __construct() {
 
-		// use translation
-		add_action( 'plugins_loaded', array( $this, 'translation' ) );
+		// Use translation.
+		add_action( 'plugins_loaded', [ $this, 'translation' ] );
 
-		// filter the feature image markup and add button
-		add_filter( 'commentpress_get_feature_image', array( $this, 'get_button' ), 20, 2 );
+		// Filter the feature image markup and add button.
+		add_filter( 'commentpress_get_feature_image', [ $this, 'get_button' ], 20, 2 );
 
-		// save feature image
-		add_action( 'wp_ajax_set_feature_image', array( $this, 'set_feature_image' ) );
+		// Save feature image.
+		add_action( 'wp_ajax_set_feature_image', [ $this, 'set_feature_image' ] );
 
-		// filter attachments to show only those for a user
-		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_media' ) );
+		// Filter attachments to show only those for a user.
+		add_filter( 'ajax_query_attachments_args', [ $this, 'filter_media' ] );
 
 	}
-
-
 
 	/**
 	 * Load translation if present.
@@ -83,16 +79,15 @@ class Feature_Image_Switcher {
 	 */
 	public function translation() {
 
-		// allow translations to be added
+		// Load translations.
+		// phpcs:ignore WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
 		load_plugin_textdomain(
-			'feature-image-switcher', // unique name
-			false, // deprecated argument
-			dirname( plugin_basename( FEATURE_IMAGE_SWITCHER_FILE ) ) . '/languages/'
+			'feature-image-switcher', // Unique name.
+			false, // Deprecated argument.
+			dirname( plugin_basename( __FILE__ ) ) . '/languages/' // Relative path to translation files.
 		);
 
 	}
-
-
 
 	/**
 	 * Append our markup to feature image.
@@ -105,21 +100,21 @@ class Feature_Image_Switcher {
 	 */
 	public function get_button( $html, $post ) {
 
-		// disallow users without permissions
-		if ( ! $this->allow_button( $post ) ) return $html;
+		// Disallow users without permissions.
+		if ( ! $this->allow_button( $post ) ) {
+			return $html;
+		}
 
-		// append our HTML to the image markup
+		// Append our HTML to the image markup.
 		$html .= '<a href="#" class="feature-image-switcher button" id="feature-image-switcher-' . $post->ID . '" style="position: absolute; top: 20px; right: 20px; text-transform: uppercase; font-family: sans-serif; font-weight: bold;">' . __( 'Choose New', 'feature-image-switcher' ) . '</a>';
 
-		// add javascripts
+		// Add javascripts.
 		$this->enqueue_scripts();
 
 		// --<
 		return $html;
 
 	}
-
-
 
 	/**
 	 * Conditions for showing feature image switcher button.
@@ -131,18 +126,18 @@ class Feature_Image_Switcher {
 	 */
 	public function allow_button( $post ) {
 
-		// init as allowed
+		// Init as allowed.
 		$allowed = true;
 
-		// disallow users without upload permissions
+		// Disallow users without upload permissions.
 		if ( ! current_user_can( 'upload_files' ) ) {
 			$allowed = false;
 
-		// disallow users who are not editors
+		// Disallow users who are not editors.
 		} elseif ( ! current_user_can( 'edit_posts' ) ) {
 			$allowed = false;
 
-		// disallow unless singular
+		// Disallow unless singular.
 		} elseif ( ! is_singular() ) {
 			$allowed = false;
 
@@ -164,8 +159,6 @@ class Feature_Image_Switcher {
 
 	}
 
-
-
 	/**
 	 * Enqueue the necessary scripts.
 	 *
@@ -173,37 +166,37 @@ class Feature_Image_Switcher {
 	 */
 	public function enqueue_scripts() {
 
-		// load media
+		// load media.
 		wp_enqueue_media();
 
-		// enqueue custom javascript
+		// Enqueue custom javascript.
 		wp_enqueue_script(
 			'feature-image-switcher-js',
 			FEATURE_IMAGE_SWITCHER_URL . 'assets/js/feature-image-switcher.js',
-			array( 'jquery' ),
+			[ 'jquery' ],
 			FEATURE_IMAGE_SWITCHER_VERSION,
-			true // in footer
+			true // In footer.
 		);
 
-		// init localisation
-		$localisation = array(
+		// Init localisation.
+		$localisation = [
 			'title' => __( 'Choose Feature Image', 'feature-image-switcher' ),
 			'button' => __( 'Set Feature Image', 'feature-image-switcher' ),
-		);
+		];
 
-		/// init settings
-		$settings = array(
+		// Init settings.
+		$settings = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 			'loading' => FEATURE_IMAGE_SWITCHER_URL . 'assets/images/loading.gif',
-		);
+		];
 
-		// localisation array
-		$vars = array(
+		// Localisation array.
+		$vars = [
 			'localisation' => $localisation,
 			'settings' => $settings,
-		);
+		];
 
-		// localise the WordPress way
+		// Localise the WordPress way.
 		wp_localize_script(
 			'feature-image-switcher-js',
 			'Featured_Image_Switcher_Settings',
@@ -212,8 +205,6 @@ class Feature_Image_Switcher {
 
 	}
 
-
-
 	/**
 	 * Set feature image as a result of the media upload modal selection.
 	 *
@@ -221,55 +212,65 @@ class Feature_Image_Switcher {
 	 */
 	public function set_feature_image() {
 
-		// init data
-		$data = array(
+		// Init data.
+		$data = [
 			'success' => 'false',
-		);
+		];
 
-		// disallow users without upload permissions
-		if ( ! current_user_can( 'upload_files' ) ) return $data;
+		// Disallow users without upload permissions.
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return $data;
+		}
 
-		// disallow users who are not editors
-		if ( ! current_user_can( 'edit_posts' ) ) return $data;
+		// Disallow users who are not editors.
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return $data;
+		}
 
-		// get post ID
+		// Get post ID.
 		$post_id = isset( $_POST['post_id'] ) ? absint( trim( $_POST['post_id'] ) ) : 0;
 
-		// sanity checks
-		if ( ! is_numeric( $post_id ) ) return $data;
-		if ( $post_id === 0 ) return $data;
+		// Sanity checks.
+		if ( ! is_numeric( $post_id ) ) {
+			return $data;
+		}
+		if ( $post_id === 0 ) {
+			return $data;
+		}
 
-		// add to data
+		// Add to data.
 		$data['post_id'] = $post_id;
 
-		// get attachment ID
+		// Get attachment ID.
 		$attachment_id = isset( $_POST['attachment_id'] ) ? absint( trim( $_POST['attachment_id'] ) ) : 0;
 
-		// sanity checks
-		if ( ! is_numeric( $attachment_id ) ) return $data;
-		if ( $attachment_id === 0 ) return $data;
+		// Sanity checks.
+		if ( ! is_numeric( $attachment_id ) ) {
+			return $data;
+		}
+		if ( $attachment_id === 0 ) {
+			return $data;
+		}
 
-		// add to data
+		// Add to data.
 		$data['attachment_id'] = $attachment_id;
 
-		// okay let's do it
+		// Okay let's do it.
 		set_post_thumbnail( $post_id, $attachment_id );
 
-		// get the image markup
+		// Get the image markup.
 		$content = get_the_post_thumbnail( $post_id, 'commentpress-feature' );
 
-		// add to data
+		// Add to data.
 		$data['markup'] = $content;
 
-		// init data
+		// Init data.
 		$data['success'] = 'true';
 
-		// send data to browser
+		// Send data to browser.
 		$this->send_data( $data );
 
 	}
-
-
 
 	/**
 	 * Ensure that users see just their own uploaded media.
@@ -281,7 +282,7 @@ class Feature_Image_Switcher {
 	 */
 	public function filter_media( $query ) {
 
-		// admins and editors get to see everything
+		// Admins and editors get to see everything.
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			$query['author'] = get_current_user_id();
 		}
@@ -290,8 +291,6 @@ class Feature_Image_Switcher {
 		return $query;
 
 	}
-
-
 
 	/**
 	 * Send JSON data to the browser.
@@ -302,29 +301,25 @@ class Feature_Image_Switcher {
 	 */
 	private function send_data( $data ) {
 
-		// is this an AJAX request?
-		if ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) {
+		// Is this an AJAX request?
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 
-			// set reasonable headers
-			header('Content-type: text/plain');
-			header("Cache-Control: no-cache");
-			header("Expires: -1");
+			// Set reasonable headers.
+			header( 'Content-type: text/plain' );
+			header( 'Cache-Control: no-cache' );
+			header( 'Expires: -1' );
 
-			// echo
+			// Echo data.
 			echo json_encode( $data );
 
-			// die
+			// Die.
 			exit();
 
 		}
 
 	}
 
-
-
-} // class Feature_Image_Switcher ends
-
-
+}
 
 /**
  * Plugin reference getter.
@@ -338,11 +333,6 @@ function feature_image_switcher() {
 	return $feature_image_switcher;
 }
 
-
-
-// instantiate the class
+// Bootstrap plugin.
 global $feature_image_switcher;
 $feature_image_switcher = new Feature_Image_Switcher();
-
-
-

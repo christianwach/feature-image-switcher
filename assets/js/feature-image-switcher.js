@@ -3,6 +3,8 @@
  *
  * Implements functionality for the "Switcher" button.
  *
+ * @since 0.1
+ *
  * @package Featured_Image_Switcher
  */
 
@@ -15,8 +17,6 @@
  * @since 0.1
  */
 var Featured_Image_Switcher = Featured_Image_Switcher || {};
-
-
 
 /**
  * Pass the jQuery shortcut in.
@@ -34,7 +34,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 	 */
 	Featured_Image_Switcher.settings = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -46,10 +46,10 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 */
 		this.init = function() {
 
-			// init localisation
+			// Init localisation.
 			me.init_localisation();
 
-			// init settings
+			// Init settings.
 			me.init_settings();
 
 		};
@@ -65,7 +65,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 
 		};
 
-		// init localisation array
+		// Init localisation array.
 		me.localisation = [];
 
 		/**
@@ -91,7 +91,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 			return me.localisation[identifier];
 		};
 
-		// init settings array
+		// Init settings array.
 		me.settings = [];
 
 		/**
@@ -126,7 +126,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 	 */
 	Featured_Image_Switcher.switcher = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -149,10 +149,10 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 */
 		this.dom_ready = function() {
 
-			// set up instance
+			// Set up instance.
 			me.setup();
 
-			// enable listeners
+			// Enable listeners.
 			me.listeners();
 
 		};
@@ -169,7 +169,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 			src = Featured_Image_Switcher.settings.get_setting( 'loading' ),
 			spinner = '<img src="' + src + '" id="feature-image-loading" style="position: absolute; top: 30%; left: 35%;" />'
 
-			// init AJAX spinner
+			// Init AJAX spinner
 			$('.feature-image-switcher').after( spinner );
 			$('#feature-image-loading').hide();
 
@@ -184,7 +184,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 */
 		this.listeners = function() {
 
-			// declare vars
+			// Declare vars.
 			var button = $('.feature-image-switcher');
 
 			/**
@@ -194,21 +194,21 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 			 */
 			button.on( 'click', function( event ) {
 
-				// prevent link action
+				// Prevent link action.
 				if ( event.preventDefault ) {
 					event.preventDefault();
 				}
 
-				var file_frame, // wp.media file_frame
+				var file_frame, // wp.media file_frame.
 					post_id = $(this).attr( 'id' ).split( '-' )[3];
 
-				// sanity check
+				// Sanity check.
 				if ( file_frame ) {
 					file_frame.open();
 					return;
 				}
 
-				// init WP Media
+				// Init WP Media.
 				file_frame = wp.media.frames.file_frame = wp.media({
 					title: Featured_Image_Switcher.settings.get_localisation( 'title' ),
 					button: {
@@ -217,21 +217,21 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 					multiple: false
 				});
 
-				// add callback for image selection
+				// Add callback for image selection.
 				file_frame.on( 'select', function() {
 
-					// grab attachment data
+					// Grab attachment data.
 					attachment = file_frame.state().get( 'selection' ).first().toJSON();
 
-					// show spinner
+					// Show spinner.
 					$('#feature-image-loading').show();
 
-					// send the ID to the server
+					// Send the ID to the server.
 					me.send( post_id, attachment.id );
 
 				});
 
-				// open.modal
+				// Open modal.
 				file_frame.open();
 
 				// --<
@@ -251,27 +251,27 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 */
 		this.send = function( post_id, attachment_id ) {
 
-			// use jQuery post
+			// Use jQuery post.
 			$.post(
 
-				// URL to post to
+				// URL to post to.
 				Featured_Image_Switcher.settings.get_setting( 'ajax_url' ),
 
 				{
 
-					// token received by WordPress
+					// Token received by WordPress.
 					action: 'set_feature_image',
 
-					// data to pass
+					// Data to pass.
 					post_id: post_id,
 					attachment_id: attachment_id
 
 				},
 
-				// callback
+				// Callback.
 				function( data, textStatus ) {
 
-					// update if success, otherwise show error
+					// Update if success, otherwise show error.
 					if ( textStatus == 'success' ) {
 						me.update( data );
 					} else {
@@ -282,7 +282,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 
 				},
 
-				// expected format
+				// Expected format.
 				'json'
 
 			);
@@ -298,32 +298,30 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 */
 		this.update = function( data ) {
 
-			// convert to jQuery object
+			// Convert to jQuery object.
 			if ( $.parseHTML ) {
 				markup = $( $.parseHTML( data.markup ) );
 			} else {
 				markup = $(data.markup);
 			}
 
-			// switch image
+			// Switch image.
 			$( '#feature-image-switcher-' + data.post_id ).prev( 'img' ).replaceWith( markup );
 
-			// hide spinner
+			// Hide spinner.
 			$('#feature-image-loading').hide();
 
 		};
 
 	};
 
-	// init settings
+	// Init settings.
 	Featured_Image_Switcher.settings.init();
 
-	// init switcher
+	// Init switcher.
 	Featured_Image_Switcher.switcher.init();
 
 } )( jQuery );
-
-
 
 /**
  * Trigger dom_ready methods where necessary.
@@ -332,11 +330,8 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
  */
 jQuery(document).ready( function($) {
 
-	// the DOM is loaded now
+	// The DOM is loaded now.
 	Featured_Image_Switcher.settings.dom_ready();
 	Featured_Image_Switcher.switcher.dom_ready();
 
-}); // end document.ready()
-
-
-
+});
