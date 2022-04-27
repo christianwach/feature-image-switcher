@@ -230,7 +230,7 @@ class Feature_Image_Switcher {
 		}
 
 		// Get post ID.
-		$post_id = isset( $_POST['post_id'] ) ? absint( trim( $_POST['post_id'] ) ) : 0;
+		$post_id = isset( $_POST['post_id'] ) ? (int) trim( wp_unslash( $_POST['post_id'] ) ) : 0;
 
 		// Sanity checks.
 		if ( ! is_numeric( $post_id ) ) {
@@ -244,7 +244,7 @@ class Feature_Image_Switcher {
 		$data['post_id'] = $post_id;
 
 		// Get attachment ID.
-		$attachment_id = isset( $_POST['attachment_id'] ) ? absint( trim( $_POST['attachment_id'] ) ) : 0;
+		$attachment_id = isset( $_POST['attachment_id'] ) ? (int) trim( wp_unslash( $_POST['attachment_id'] ) ) : 0;
 
 		// Sanity checks.
 		if ( ! is_numeric( $attachment_id ) ) {
