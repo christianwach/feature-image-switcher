@@ -5,7 +5,7 @@
  * GitHub Plugin URI: https://github.com/christianwach/feature-image-switcher
  * Description: Creates a switcher for changing the feature image of a post.
  * Author: Christian Wach
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author URI: https://haystack.co.uk
  * Text Domain: feature-image-switcher
  * Domain Path: /languages
@@ -17,7 +17,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Set our version here.
-define( 'FEATURE_IMAGE_SWITCHER_VERSION', '0.1.1' );
+define( 'FEATURE_IMAGE_SWITCHER_VERSION', '0.1.2' );
 
 // Store reference to this file.
 if ( ! defined( 'FEATURE_IMAGE_SWITCHER_FILE' ) ) {
