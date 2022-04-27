@@ -199,7 +199,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 					event.preventDefault();
 				}
 
-				var file_frame, // wp.media file_frame.
+				var file_frame,
 					post_id = $(this).attr( 'id' ).split( '-' )[3];
 
 				// Sanity check.
@@ -220,7 +220,7 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 				// Add callback for image selection.
 				file_frame.on( 'select', function() {
 
-					// Grab attachment data and security token.
+					// Grab Attachment data and security token.
 					var attachment = file_frame.state().get( 'selection' ).first().toJSON(),
 						token = button.data( 'security' );
 
@@ -247,8 +247,8 @@ var Featured_Image_Switcher = Featured_Image_Switcher || {};
 		 *
 		 * @since 0.1
 		 *
-		 * @param {Integer} post_id The numeric ID of the post.
-		 * @param {Integer} attachment_id The numeric ID of the attachment.
+		 * @param {Integer} post_id The numeric ID of the Post.
+		 * @param {Integer} attachment_id The numeric ID of the Attachment.
 		 * @param {String} token The AJAX security token.
 		 */
 		this.send = function( post_id, attachment_id, token ) {
