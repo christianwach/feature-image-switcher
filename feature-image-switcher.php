@@ -1,7 +1,8 @@
 <?php
 /**
  * Plugin Name: Feature Image Switcher
- * Plugin URI: http://spirit-of-football.de/
+ * Plugin URI: https://github.com/christianwach/feature-image-switcher
+ * GitHub Plugin URI: https://github.com/christianwach/feature-image-switcher
  * Description: Creates a switcher for changing the feature image of a post.
  * Author: Christian Wach
  * Version: 0.1.1
