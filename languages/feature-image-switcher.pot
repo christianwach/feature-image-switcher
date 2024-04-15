@@ -1,44 +1,52 @@
-# Copyright (C) 2022 Christian Wach
+# Copyright (C) 2024 Christian Wach
 # This file is distributed under the same license as the Feature Image Switcher plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Feature Image Switcher 0.1.1\n"
+"Project-Id-Version: Feature Image Switcher 0.1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/feature-image-switcher\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-27T14:22:40+00:00\n"
+"POT-Creation-Date: 2024-04-15T15:02:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: feature-image-switcher\n"
 
 #. Plugin Name of the plugin
+#: feature-image-switcher.php
 msgid "Feature Image Switcher"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: feature-image-switcher.php
 msgid "https://github.com/christianwach/feature-image-switcher"
 msgstr ""
 
 #. Description of the plugin
+#: feature-image-switcher.php
 msgid "Creates a switcher for changing the feature image of a post."
 msgstr ""
 
 #. Author of the plugin
+#: feature-image-switcher.php
 msgid "Christian Wach"
 msgstr ""
 
 #. Author URI of the plugin
+#: feature-image-switcher.php
 msgid "https://haystack.co.uk"
 msgstr ""
 
+#: feature-image-switcher.php:103
 msgid "Choose New"
 msgstr ""
 
+#: feature-image-switcher.php:173
 msgid "Choose Feature Image"
 msgstr ""
 
+#: feature-image-switcher.php:174
 msgid "Set Feature Image"
 msgstr ""
