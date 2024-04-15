@@ -1,14 +1,16 @@
 <?php
 /**
- * Plugin Name: Feature Image Switcher
- * Plugin URI: https://github.com/christianwach/feature-image-switcher
+ * Feature Image Switcher
+ *
+ * Plugin Name:       Feature Image Switcher
+ * Description:       Creates a switcher for changing the feature image of a post.
+ * Plugin URI:        https://github.com/christianwach/feature-image-switcher
  * GitHub Plugin URI: https://github.com/christianwach/feature-image-switcher
- * Description: Creates a switcher for changing the feature image of a post.
- * Author: Christian Wach
- * Version: 0.1.2
- * Author URI: https://haystack.co.uk
- * Text Domain: feature-image-switcher
- * Domain Path: /languages
+ * Version:           0.1.2
+ * Author:            Christian Wach
+ * Author URI:        https://haystack.co.uk
+ * Text Domain:       feature-image-switcher
+ * Domain Path:       /languages
  *
  * @package Feature_Image_Switcher
  */
@@ -42,15 +44,6 @@ if ( ! defined( 'FEATURE_IMAGE_SWITCHER_PATH' ) ) {
  * @since 0.1
  */
 class Feature_Image_Switcher {
-
-	/**
-	 * Switcher object.
-	 *
-	 * @since 0.1
-	 * @access public
-	 * @var object $switcher The Switcher object
-	 */
-	public $switcher;
 
 	/**
 	 * Constructor.
@@ -95,7 +88,7 @@ class Feature_Image_Switcher {
 	 *
 	 * @since 0.1
 	 *
-	 * @param str $html The existing feature image markup.
+	 * @param str     $html The existing feature image markup.
 	 * @param WP_Post $post The WordPress post object.
 	 * @return str $html The modified feature image markup.
 	 */
@@ -177,20 +170,20 @@ class Feature_Image_Switcher {
 
 		// Init localisation.
 		$localisation = [
-			'title' => __( 'Choose Feature Image', 'feature-image-switcher' ),
+			'title'  => __( 'Choose Feature Image', 'feature-image-switcher' ),
 			'button' => __( 'Set Feature Image', 'feature-image-switcher' ),
 		];
 
 		// Init settings.
 		$settings = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'loading' => FEATURE_IMAGE_SWITCHER_URL . 'assets/images/loading.gif',
+			'loading'  => FEATURE_IMAGE_SWITCHER_URL . 'assets/images/loading.gif',
 		];
 
 		// Localisation array.
 		$vars = [
 			'localisation' => $localisation,
-			'settings' => $settings,
+			'settings'     => $settings,
 		];
 
 		// Localise the WordPress way.
@@ -216,7 +209,7 @@ class Feature_Image_Switcher {
 
 		// Since this is an AJAX request, check security.
 		$result = check_ajax_referer( 'feature_image_switcher', false, false );
-		if ( $result === false ) {
+		if ( false === $result ) {
 			wp_send_json( $data );
 		}
 
@@ -237,7 +230,7 @@ class Feature_Image_Switcher {
 		if ( ! is_numeric( $post_id ) ) {
 			wp_send_json( $data );
 		}
-		if ( $post_id === 0 ) {
+		if ( 0 === $post_id ) {
 			wp_send_json( $data );
 		}
 
@@ -251,7 +244,7 @@ class Feature_Image_Switcher {
 		if ( ! is_numeric( $attachment_id ) ) {
 			wp_send_json( $data );
 		}
-		if ( $attachment_id === 0 ) {
+		if ( 0 === $attachment_id ) {
 			wp_send_json( $data );
 		}
 
@@ -302,13 +295,15 @@ class Feature_Image_Switcher {
  *
  * @since 0.1
  *
- * @return object $feature_image_switcher The plugin object.
+ * @return Feature_Image_Switcher $plugin The plugin object.
  */
 function feature_image_switcher() {
-	global $feature_image_switcher;
-	return $feature_image_switcher;
+	static $plugin;
+	if ( ! isset( $plugin ) ) {
+		$plugin = new Feature_Image_Switcher();
+	}
+	return $plugin;
 }
 
 // Bootstrap plugin.
-global $feature_image_switcher;
-$feature_image_switcher = new Feature_Image_Switcher();
+feature_image_switcher();
